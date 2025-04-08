@@ -20,13 +20,6 @@ class AdminUserSeeder extends Seeder
         ]);
 
         // Optional: Add another admin with level 2
-        User::create([
-            'full_name' => 'Sub Admin User',
-            'email' => 'subadmin@gmail.com',
-            'password' => Hash::make('subadmin123'),
-            'phone' => '0987654321',
-            'address' => '456 Sub Admin Street',
-            'level' => 2, // Sub-admin
-        ]);
+
     }
 }

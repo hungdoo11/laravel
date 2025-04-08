@@ -47,8 +47,8 @@
             <div class="container">
                 <div class="pull-left auto-width-left">
                     <ul class="top-menu menu-beta l-inline">
-                        <li><a href=""><i class="fa fa-home"></i> 90-92 Lê Thị Riêng, Bến Thành, Quận 1</a></li>
-                        <li><a href=""><i class="fa fa-phone"></i> 0163 296 7751</a></li>
+                        <li><a href=""><i class="fa fa-home"></i> Đà nẵng, Trịnh Huỳnh</a></li>
+                        <li><a href=""><i class="fa fa-phone"></i> 0909090901</a></li>
                     </ul>
                 </div>
                 <div class="pull-right auto-width-right">
@@ -70,7 +70,7 @@
         <div class="header-body">
             <div class="container beta-relative">
                 <div class="pull-left">
-                    <a href="" id="logo"><img src="assets/dest/images/logo-cake.png" width="200px" alt=""></a>
+                    <a href="" id="logo"><img src="assets/dest/images/logo_banh.png" width="200px" alt=""></a>
                 </div>
                 <div class="pull-right beta-components space-left ov">
                     <div class="space10">&nbsp;</div>
@@ -157,7 +157,7 @@
                     <div class="clearfix"></div>
                 </div> <!-- .container -->
             </div> <!-- .header-body -->
-            <div class="header-bottom" style="background-color: #0277b8;">
+            <div class="header-bottom" style="background-color:rgb(137, 150, 157);">
                 <div class="container">
                     <a class="visible-xs beta-menu-toggle pull-right" href="#"><span class='beta-menu-toggle-text'>Menu</span> <i class="fa fa-bars"></i></a>
                     <div class="visible-xs clearfix"></div>
@@ -184,54 +184,86 @@
         <div class="container">
             @yield('content')
         </div>
+        <style>
+            #footer .widget {
+                margin-bottom: 20px;
+            }
 
+            #footer .contact-info p {
+                margin-bottom: 10px;
+            }
+
+            #footer .social-links a {
+                display: block;
+                margin-bottom: 5px;
+                color: #fff;
+            }
+
+            #footer .social-links a:hover {
+                color: #ddd;
+            }
+        </style>
         <div id="footer" class="color-div">
             <div class="container">
                 <div class="row">
+                    <!-- Cột 1: Thông tin cửa hàng -->
                     <div class="col-sm-3">
                         <div class="widget">
-                            <h4 class="widget-title">Instagram Feed</h4>
-                            <div id="beta-instagram-feed">
-                                <div></div>
+                            <h4 class="widget-title">Về chúng tôi</h4>
+                            <div class="contact-info">
+                                <p>Chúng tôi là cửa hàng bánh ngọt chuyên cung cấp các loại bánh tươi ngon, chất lượng cao, được làm từ nguyên liệu tự nhiên.</p>
+                                <p>
+                                    <i class="fa fa-map-marker"></i> 123 Đường Bánh Ngọt, Quận 1, TP. Hồ Chí Minh<br>
+                                    <i class="fa fa-phone"></i> (+84) 123 456 789<br>
+                                    <i class="fa fa-envelope"></i> info@banhngot.com
+                                </p>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Cột 2: Liên kết nhanh -->
                     <div class="col-sm-2">
                         <div class="widget">
-                            <h4 class="widget-title">Information</h4>
+                            <h4 class="widget-title">Liên kết nhanh</h4>
                             <div>
                                 <ul>
-                                    <li><a href="blog_fullwidth_2col.html"><i class="fa fa-chevron-right"></i> Web Design</a></li>
-                                    <li><a href="blog_fullwidth_2col.html"><i class="fa fa-chevron-right"></i> Web development</a></li>
-                                    <li><a href="blog_fullwidth_2col.html"><i class="fa fa-chevron-right"></i> Marketing</a></li>
-                                    <li><a href="blog_fullwidth_2col.html"><i class="fa fa-chevron-right"></i> Tips</a></li>
-                                    <li><a href="blog_fullwidth_2col.html"><i class="fa fa-chevron-right"></i> Resources</a></li>
-                                    <li><a href="blog_fullwidth_2col.html"><i class="fa fa-chevron-right"></i> Illustrations</a></li>
+                                    <li><a href="{{ url('/') }}"><i class="fa fa-chevron-right"></i> Trang chủ</a></li>
+                                    <li><a href="{{ url('/products') }}"><i class="fa fa-chevron-right"></i> Sản phẩm</a></li>
+                                    <li><a href="{{ url('/about') }}"><i class="fa fa-chevron-right"></i> Về chúng tôi</a></li>
+                                    <li><a href="{{ url('/contact') }}"><i class="fa fa-chevron-right"></i> Liên hệ</a></li>
+                                    <li><a href="{{ url('/cart') }}"><i class="fa fa-chevron-right"></i> Giỏ hàng</a></li>
+                                    <li><a href="{{ url('/checkout') }}"><i class="fa fa-chevron-right"></i> Thanh toán</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Cột 3: Giờ mở cửa -->
                     <div class="col-sm-4">
                         <div class="col-sm-10">
                             <div class="widget">
-                                <h4 class="widget-title">Contact Us</h4>
+                                <h4 class="widget-title">Giờ mở cửa</h4>
                                 <div>
                                     <div class="contact-info">
-                                        <i class="fa fa-map-marker"></i>
-                                        <p>30 South Park Avenue San Francisco, CA 94108 Phone: +78 123 456 78</p>
-                                        <p>Nemo enim ipsam voluptatem quia voluptas sit asnatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione.</p>
+                                        <p><i class="fa fa-clock-o"></i> Thứ 2 - Thứ 6: 8:00 - 20:00</p>
+                                        <p><i class="fa fa-clock-o"></i> Thứ 7 - Chủ Nhật: 9:00 - 21:00</p>
+                                        <p>Chúng tôi luôn sẵn sàng phục vụ bạn vào tất cả các ngày trong tuần!</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Cột 4: Theo dõi chúng tôi -->
                     <div class="col-sm-3">
                         <div class="widget">
-                            <h4 class="widget-title">Newsletter Subscribe</h4>
-                            <form action="#" method="post">
-                                <input type="email" name="your_email">
-                                <button class="pull-right" type="submit">Subscribe <i class="fa fa-chevron-right"></i></button>
-                            </form>
+                            <h4 class="widget-title">Theo dõi chúng tôi</h4>
+                            <div class="social-links">
+                                <p>Kết nối với chúng tôi qua mạng xã hội:</p>
+                                <a href="https://facebook.com" target="_blank"><i class="fa fa-facebook"></i> Facebook</a><br>
+                                <a href="https://instagram.com" target="_blank"><i class="fa fa-instagram"></i> Instagram</a><br>
+                                <a href="https://twitter.com" target="_blank"><i class="fa fa-twitter"></i> Twitter</a>
+                            </div>
                         </div>
                     </div>
                 </div> <!-- .row -->
@@ -266,17 +298,7 @@
         <script src="assets/dest/js/wow.min.js"></script>
         <!--customjs-->
         <script src="assets/dest/js/custom2.js"></script>
-        <script>
-            $(document).ready(function($) {
-                $(window).scroll(function() {
-                    if ($(this).scrollTop() > 150) {
-                        $(".header-bottom").addClass('fixNav')
-                    } else {
-                        $(".header-bottom").removeClass('fixNav')
-                    }
-                })
-            })
-        </script>
+
         <script>
             /* <![CDATA[ */
             jQuery(document).ready(function($) {
@@ -434,36 +456,7 @@
                 });
             });
         </script>
-        <script>
-            jQuery(document).ready(function($) {
-                'use strict';
 
-                // color box
-
-                //color
-                jQuery('#style-selector').animate({
-                    left: '-213px'
-                });
-
-                jQuery('#style-selector a.close').click(function(e) {
-                    e.preventDefault();
-                    var div = jQuery('#style-selector');
-                    if (div.css('left') === '-213px') {
-                        jQuery('#style-selector').animate({
-                            left: '0'
-                        });
-                        jQuery(this).removeClass('icon-angle-left');
-                        jQuery(this).addClass('icon-angle-right');
-                    } else {
-                        jQuery('#style-selector').animate({
-                            left: '-213px'
-                        });
-                        jQuery(this).removeClass('icon-angle-right');
-                        jQuery(this).addClass('icon-angle-left');
-                    }
-                });
-            });
-        </script>
 </body>
 
 </html>

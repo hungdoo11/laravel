@@ -34,8 +34,8 @@ Route::get('/login', function () {
     return view('/shop/login');
 });
 
-Route::get('/signup', function () {
-    return view('/shop/signup');
+Route::get('/dangky', function () {
+    return view('/shop/dangky');
 });
 
 Route::get('/pricing', function () {
@@ -46,9 +46,9 @@ Route::get('/shopping_cart', function () {
     return view('/shop/shopping_cart');
 });
 
-Route::get('/product', function () {
-    return view('/shop/product');
-});
+// Route::get('/product', function () {
+//     return view('/shop/product');
+// });
 
 Route::get('/product_type', function () {
     return view('/shop/product_type');
@@ -99,8 +99,8 @@ Route::get('/xoagiohang/{id}', [PageController::class, 'deleteCartItem'])->name(
 
 Route::post('checkout', [PageController::class, 'postCheckout'])->name('banhang.postdathang');
 
-Route::get('/signup', [PageController::class, 'getSignin'])->name('getsignin');
-Route::post('/signup', [PageController::class, 'postSignin'])->name('postsignin');
+Route::get('/dangky', [PageController::class, 'getSignin'])->name('getsignin');
+Route::post('/dangky', [PageController::class, 'postSignin'])->name('postsignin');
 
 Route::get('/login', [PageController::class, 'getLogin'])->name('getlogin');
 Route::post('/login', [PageController::class, 'postLogin'])->name('postlogin');
@@ -109,6 +109,8 @@ Route::post('/login', [PageController::class, 'postLogin'])->name('postlogin');
 Route::get('/shop', [PageController::class, 'getIndex'])->name('shop.index');
 
 Route::get('/dangxuat', [PageController::class, 'getLogout'])->name('getlogout');
+
+Route::get('/order-success', [PageController::class, 'orderSuccess'])->name('banhang.order-success');
 
 Route::get('/check-session', function () {
     return Session::all();

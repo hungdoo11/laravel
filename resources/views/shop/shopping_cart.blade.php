@@ -60,7 +60,7 @@
 						</td>
 
 						<td class="product-quantity">
-							<a href="{{ route('banhang.reduceByOne', $id) }}" class="btn btn-warning btn-sm">
+							<a href="{{ route('banhang.reduceByOne', $id) }}" class="btn btn-info btn-sm">
 								<i class="fa fa-minus"></i>
 							</a>
 							<span class="qty">{{ $item['qty'] }}</span>
@@ -90,14 +90,53 @@
 				<tfoot>
 					<tr>
 						<td colspan="6" class="actions">
-							<div class="coupon">
-								<label for="coupon_code">Coupon</label>
-								<input type="text" name="coupon_code" value="" placeholder="Coupon code">
-								<button type="submit" class="beta-btn primary" name="apply_coupon">Apply Coupon <i class="fa fa-chevron-right"></i></button>
+							<div class="pull-left">
+								<a style="background-color: transparent;"><img src="assets/dest/images/logo_banh.png" width="200px" alt=""></a>
+							</div>
+							<div class="cart-collaterals">
+								<form class="shipping_calculator pull-left" action="#" method="post">
+									<!-- <h2><a href="#" class="shipping-calculator-button">Calculate Shipping <span>↓</span></a></h2> -->
+									<section class="shipping-calculator-form" style="display: none;">
+										<p class="form-row form-row-wide">
+											<select name="calc_shipping_country" id="calc_shipping_country" class="country_to_state" style="padding:10px;" rel="calc_shipping_state">
+												<option value="">Select a country…</option>
+												<!-- Giữ nguyên danh sách quốc gia -->
+												<option value="VN">Vietnam</option>
+												<!-- Có thể rút gọn danh sách nếu không cần -->
+											</select>
+										</p>
+										<p class="form-row form-row-wide">
+											<input type="hidden" name="calc_shipping_state" id="calc_shipping_state" placeholder="State / county">
+										</p>
+										<p class="form-row form-row-wide">
+											<input type="text" class="input-text" value="" placeholder="Postcode / Zip" name="calc_shipping_postcode" id="calc_shipping_postcode">
+										</p>
+										<p><button type="submit" name="calc_shipping" value="1" class="beta-btn primary pull-right">Update Totals</button></p>
+									</section>
+								</form>
+
+								<div class="cart-totals pull-right">
+									<div class="cart-totals-row">
+										<h5 class="cart-total-title">Cart Totals</h5>
+									</div>
+									<div class="cart-totals-row">
+										<span>Cart Subtotal:</span>
+										<span>{{ Session::has('cart') ? number_format(Session('cart')->totalPrice) : '0' }} VND</span>
+									</div>
+									<div class="cart-totals-row">
+										<span>Shipping:</span>
+										<span>Free Shipping</span>
+									</div>
+									<div class="cart-totals-row">
+										<span>Order Total:</span>
+										<span>{{ Session::has('cart') ? number_format(Session('cart')->totalPrice) : '0' }} VND</span>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
 							</div>
 
-							<button type="submit" class="beta-btn primary" name="update_cart">Update Cart <i class="fa fa-chevron-right"></i></button>
-							<a href="{{ url('/checkout') }}" class="beta-btn primary">Proceed to Checkout <i class="fa fa-chevron-right"></i></a>
+							<a href="{{ url('/checkout') }}" class="beta-btn primary">Mua <i class="fa fa-chevron-right"></i></a>
 						</td>
 					</tr>
 				</tfoot>
@@ -106,48 +145,7 @@
 		</div>
 
 		<!-- Cart Collaterals -->
-		<div class="cart-collaterals">
-			<form class="shipping_calculator pull-left" action="#" method="post">
-				<h2><a href="#" class="shipping-calculator-button">Calculate Shipping <span>↓</span></a></h2>
-				<section class="shipping-calculator-form" style="display: none;">
-					<p class="form-row form-row-wide">
-						<select name="calc_shipping_country" id="calc_shipping_country" class="country_to_state" style="padding:10px;" rel="calc_shipping_state">
-							<option value="">Select a country…</option>
-							<!-- Giữ nguyên danh sách quốc gia -->
-							<option value="VN">Vietnam</option>
-							<!-- Có thể rút gọn danh sách nếu không cần -->
-						</select>
-					</p>
-					<p class="form-row form-row-wide">
-						<input type="hidden" name="calc_shipping_state" id="calc_shipping_state" placeholder="State / county">
-					</p>
-					<p class="form-row form-row-wide">
-						<input type="text" class="input-text" value="" placeholder="Postcode / Zip" name="calc_shipping_postcode" id="calc_shipping_postcode">
-					</p>
-					<p><button type="submit" name="calc_shipping" value="1" class="beta-btn primary pull-right">Update Totals</button></p>
-				</section>
-			</form>
 
-			<div class="cart-totals pull-right">
-				<div class="cart-totals-row">
-					<h5 class="cart-total-title">Cart Totals</h5>
-				</div>
-				<div class="cart-totals-row">
-					<span>Cart Subtotal:</span>
-					<span>{{ Session::has('cart') ? number_format(Session('cart')->totalPrice) : '0' }} VND</span>
-				</div>
-				<div class="cart-totals-row">
-					<span>Shipping:</span>
-					<span>Free Shipping</span>
-				</div>
-				<div class="cart-totals-row">
-					<span>Order Total:</span>
-					<span>{{ Session::has('cart') ? number_format(Session('cart')->totalPrice) : '0' }} VND</span>
-				</div>
-			</div>
-
-			<div class="clearfix"></div>
-		</div>
 		<!-- End of Cart Collaterals -->
 		<div class="clearfix"></div>
 	</div> <!-- #content -->

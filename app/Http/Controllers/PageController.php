@@ -11,6 +11,7 @@ use App\Models\Slide;
 use App\Models\Customer;
 use App\Models\Bill;
 use App\Models\BillDetail;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -148,14 +149,34 @@ class PageController extends Controller
             $bill_detail->unit_price = $value['price'] / $value['qty'];
             $bill_detail->save();
         }
+
         Session::forget('cart');
-        return redirect()->back()->with('success', 'Đặt hàng thành công');
+        return redirect()->route('banhang.order-success');
     }
+    public function orderSuccess()
+    {
+        return view('shop.order-success');
+    }
+    public function index(Request $request)
+    {
+        $status = $request->query('status', ''); // Lấy giá trị status từ query string, mặc định là rỗng
+        $categories = Category::when($status !== '', function ($query) use ($status) {
+            return $query->where('status', $status);
+        })->get();
+        $categories = Category::all();
+
+        return view('admin.cate', compact('categories', 'status'));
+    }
+
+    // Các hàm khác như delete, edit, v.v.
+
     public function getSignin()
     {
 
-        return view('shop.signup');
+        return view('shop.dangky');
     }
+
+
 
     public function postSignin(Request $request)
     {

@@ -8,72 +8,151 @@
     <meta name="description" content="Khóa Học Lập Trình Laravel Framework 5.x Tại Khoa Phạm">
     <meta name="author" content="">
 
-    <title>Admin - Khoa Phạm</title>
+    <title>Admin - Đăng nhập</title>
 
-    <!-- Bootstrap Core CSS -->
-    <link href="{{ asset('bower_components/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- MetisMenu CSS -->
-    <link href="{{ asset('bower_components/metisMenu/dist/metisMenu.min.css') }}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="{{ asset('dist/css/sb-admin-2.css') }}" rel="stylesheet">
+    <style>
+        body {
+            /* background: linear-gradient(135deg, #6e8efb, #a777e3); */
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+        }
 
-    <!-- Custom Fonts -->
-    <link href="{{ asset('bower_components/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
+        .login-container {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .login-container h3 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #6e8efb;
+            box-shadow: 0 0 5px rgba(110, 142, 251, 0.3);
+            outline: none;
+        }
+
+        .form-group label {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 14px;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus+label,
+        .form-group input:not(:placeholder-shown)+label {
+            top: -10px;
+            left: 10px;
+            font-size: 12px;
+            color: #6e8efb;
+            background: #fff;
+            padding: 0 5px;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: #6e8efb;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background: #5a78e3;
+        }
+
+        .alert {
+            font-size: 14px;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .text-danger {
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 col-md-offset-4">
-                <div class="login-panel panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Please Sign In</h3>
-                    </div>
-                    <div class="panel-body">
-                        @if (session('success'))
-                        <div class="alert alert-success">{{ session('success') }}</div>
-                        @endif
-                        @if (session('error'))
-                        <div class="alert alert-danger">{{ session('error') }}</div>
-                        @endif
+    <div class="login-container">
+        <h3>Đăng nhập Admin</h3>
 
-                        <form role="form" action="{{ route('admin.login.post') }}" method="POST">
-                            @csrf
-                            <fieldset>
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus value="{{ old('email') }}">
-                                    @error('email')
-                                    <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="Password" name="password" type="password" value="">
-                                    @error('password')
-                                    <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <button type="submit" class="btn btn-lg btn-success btn-block">Login</button>
-                            </fieldset>
-                        </form>
-                    </div>
-                </div>
+        <!-- Thông báo thành công hoặc lỗi -->
+        @if (session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+        @if (session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
+
+        <!-- Form đăng nhập -->
+        <form role="form" action="{{ route('admin.login.post') }}" method="POST">
+            @csrf
+            <div class="form-group">
+                <input type="email" name="email" id="email" placeholder=" " value="{{ old('email') }}">
+                <label for="email">Email</label>
+                @error('email')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
-        </div>
+
+            <div class="form-group">
+                <input type="password" name="password" id="password" placeholder=" ">
+                <label for="password">Mật khẩu</label>
+                @error('password')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <button type="submit" class="btn btn-login">Đăng nhập</button>
+        </form>
     </div>
 
-    <!-- jQuery -->
-    <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="{{ asset('bower_components/metisMenu/dist/metisMenu.min.js') }}"></script>
-
-    <!-- Custom Theme JavaScript -->
-    <script src="{{ asset('dist/js/sb-admin-2.js') }}"></script>
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

@@ -5,13 +5,13 @@
 
 		<form action="{{ url('checkout') }}" method="post" class="beta-form-checkout">
 			@csrf
-			<div class="row">
-				<!--session('success') sinh ra từ hàm postDatHang trong PageController -->
+			<!-- <div class="row">
+				session('success') sinh ra từ hàm postDatHang trong PageController
 				@if(Session::has('success'))
 				{{ Session::get('success')}}
 				@endif
-			</div>
-			<div class="row">
+			</div> -->
+			<div class="row checkout">
 				<div class="col-sm-6">
 					<h4>Đặt hàng</h4>
 					<div class="space20">&nbsp;</div>
@@ -46,6 +46,7 @@
 						<label for="notes">Ghi chú</label>
 						<textarea id="notes" name="notes"></textarea>
 					</div>
+					<button type="submit" class="btn btn-primary">Đặt hàng</button>
 				</div>
 				<div class="col-sm-6">
 					<div class="your-order">
@@ -59,7 +60,8 @@
 									@foreach($productCarts as $product)
 									<!-- one item -->
 									<div class="media">
-										<img width="25%" src="/source/image/product/{{ $product['item']['image'] }}" alt="" class="pull-left">
+										<!-- Sửa đường dẫn ảnh -->
+										<img width="25%" src="{{ asset('images/product/' . $product['item']['image']) }}" alt="{{ $product['item']['name'] }}" class="pull-left">
 										<div class="media-body">
 											<p class="font-large">{{ $product['item']['name'] }}</p>
 											<span class="cart-item-amount">{{ $product['qty'] }}*<span>
@@ -109,11 +111,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-sm-12">
-					<button type="submit" class="btn btn-primary">Đặt hàng</button>
-				</div>
-			</div>
+
 		</form>
 	</div>
 </div>
