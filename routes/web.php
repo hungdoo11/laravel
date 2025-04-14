@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ADMController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Session;
 
 
@@ -46,9 +47,9 @@ Route::get('/shopping_cart', function () {
     return view('/shop/shopping_cart');
 });
 
-// Route::get('/product', function () {
-//     return view('/shop/product');
-// });
+Route::get('/product', function () {
+    return view('/shop/product');
+});
 
 Route::get('/product_type', function () {
     return view('/shop/product_type');
@@ -111,6 +112,13 @@ Route::get('/shop', [PageController::class, 'getIndex'])->name('shop.index');
 Route::get('/dangxuat', [PageController::class, 'getLogout'])->name('getlogout');
 
 Route::get('/order-success', [PageController::class, 'orderSuccess'])->name('banhang.order-success');
+
+Route::post('/input-email', [PageController::class, 'postInputEmail'])->name('postInputEmail');
+Route::get('/input-email', [PageController::class, 'getInputEmail'])->name('getInputEmail');
+
+Route::get('/product_type/{id}', [PageController::class, 'showByType']);
+
+
 
 Route::get('/check-session', function () {
     return Session::all();

@@ -164,14 +164,19 @@
                     <nav class="main-menu">
                         <ul class="l-inline ov">
                             <li><a href="{{url('/index')}}">Trang chủ</a></li>
-                            <li><a href="{{url('/product')}}">Sản phẩm</a>
-                                <ul class="sub-menu">
-                                    <li><a href="{{ url('/product_type') }}">Sản phẩm 1</a></li>
-                                    <li><a href="{{ url('/product_type') }}">Sản phẩm 2</a></li>
-                                    <li><a href="{{ url('/product_type') }}">Sản phẩm 3</a></li>
+                            <!--  -->
 
+
+                            <li><a href="#">Sản phẩm</a>
+                                <ul class="sub-menu">
+                                    <li><a href="{{ url('/product_type/3') }}">Bánh Ngọt</a></li>
+                                    <li><a href="{{ url('/product_type/4') }}">Bánh Kem</a></li>
+                                    <li><a href="{{ url('/product_type/5') }}">Bánh Bông Lan</a></li>
+                                    <li><a href="{{ url('/product_type/6') }}">Bánh Mousse</a></li>
+                                    <li><a href="{{ url('/product_type/7') }}">Bánh Tiramisu</a></li>
                                 </ul>
                             </li>
+
                             <li><a href="{{url('/about')}}">Giới thiệu</a></li>
                             <li><a href="{{url('/contacts')}}">Liên hệ</a></li>
                         </ul>
