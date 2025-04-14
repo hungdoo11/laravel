@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\ProductType;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Session;
@@ -40,5 +41,9 @@ class AppServiceProvider extends ServiceProvider
                 ]);
             }
         });
+
+
+        $loai_sp = ProductType::all();
+        View::share('loai_sp', $loai_sp);
     }
 }

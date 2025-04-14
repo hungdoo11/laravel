@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Product;
@@ -13,8 +14,10 @@ use App\Models\Bill;
 use App\Models\BillDetail;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
-
-
+use App\Models\ProductType;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMail;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 
@@ -259,5 +262,64 @@ class PageController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('banhang.index');
+    }
+
+    public function getInputEmail()
+    {
+
+        return view('emails.input-email');
+    }
+
+    public function postInputEmail(Request $req)
+    {
+        $req->validate([
+            'txtEmail' => 'required|email',
+        ], [
+            'txtEmail.required' => 'Vui lòng nhập email.',
+            'txtEmail.email' => 'Email không đúng định dạng.',
+        ]);
+
+        $email = $req->txtEmail;
+        $user = User::where('email', $email)->first();
+
+        if ($user) {
+            // Tạo mật khẩu mới và cập nhật vào cơ sở dữ liệu
+            $newPassword = Str::random(8);
+            $user->password = bcrypt($newPassword);
+            $user->save();
+
+            // Gửi email với mật khẩu mới
+            $sentData = [
+                'title' => 'Mật khẩu mới của bạn là:',
+                'body' => $newPassword
+            ];
+
+            try {
+                Mail::to($email)->send(new \App\Mail\SendMail($sentData));
+                Session::flash('message', 'Send email successfully!');
+                return view('shop.login');
+            } catch (\Exception $e) {
+                return redirect()->route('getInputEmail')->with('message', 'Failed to send email: ' . $e->getMessage());
+            }
+        } else {
+            return redirect()->route('getInputEmail')->with('message', 'Your email is not right');
+        }
+    }
+    // Trong AppServiceProvider hoặc controller base
+
+
+    // public function boot()
+    // {
+    //     $loai_sp = ProductType::all();
+    //     view()->share('loai_sp', $loai_sp);
+    // }
+
+
+
+    public function showByType($id)
+    {
+        $products = DB::table('products')->where('id_type', $id)->get();
+
+        return view('shop.product_by_type', compact('products'));
     }
 }

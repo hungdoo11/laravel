@@ -2,12 +2,23 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+namespace App\Http\Controllers;
+
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\ProductType;
 
 class CategoryController extends Controller
 {
+    public function showByType($id)
+    {
+        $type = ProductType::findOrFail($id); // Tìm loại sản phẩm
+        $products = Product::where('id_type', $id)->get(); // Lấy các sản phẩm thuộc loại này
+
+        return view('product.by_type', compact('type', 'products'));
+    }
+
     public function index(Request $request)
     {
         // Lấy giá trị status từ request (nếu có)
