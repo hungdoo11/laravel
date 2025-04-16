@@ -11,14 +11,17 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Slide;
 use App\Models\Customer;
 use App\Models\Bill;
+use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\BillDetail;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ProductType;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendMail;
+use App\Mail\OrderSuccessMail;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\Message;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -52,13 +55,25 @@ class PageController extends Controller
         }
         $promotion_products = $promotion_products->get() ?? collect([]);
 
+        $messages = [];
+
+        if (auth()->check() && auth()->user()->level == 3) {
+            $user = auth()->user();
+            $messages = Message::where(function ($query) use ($user) {
+                $query->where('from_user_id', $user->id)
+                    ->orWhere('to_user_id', $user->id);
+            })->with('sender')->orderBy('created_at')->get();
+            // ->orderBy('created_at', 'asc') // hoặc ->latest('created_at')
+
+        }
+
         // Trả về view với dữ liệu
-        return view('shop.index', compact('slides', 'new_products', 'top_products', 'promotion_products', 'search'));
+        return view('shop.index', compact('slides', 'new_products', 'top_products', 'promotion_products', 'search', 'messages'));
     }
     public function getChiTiet($sanpham_id)
     {
         $sanpham = Product::find($sanpham_id);
-        return view('chitiet', compact('sanpham'));
+        return view('shop.product', compact('sanpham'));
     }
     public function addToCart(Request $request, $id)
     {
@@ -124,38 +139,64 @@ class PageController extends Controller
         // Pass $cart and $productCarts to the view
         return view('shop.checkout', compact('cart', 'productCarts'));
     }
+
     public function postCheckout(Request $request)
     {
-        $cart = Session::get('cart');
-        $customer = new Customer();
-        $customer->name = $request->input('name');
-        $customer->gender = $request->input('gender');
-        $customer->email = $request->input('email');
-        $customer->address = $request->input('address');
-        $customer->phone_number = $request->input('phone_number');
-        $customer->note = $request->input('notes');
-        $customer->save();
+        // Validate dữ liệu
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'gender' => 'required|in:nam,nu',
+            'email' => 'required|email|max:255',
+            'address' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:15',
+            'payment_method' => 'required|in:cod,bank_transfer',
+            'notes' => 'nullable|string',
+        ]);
 
-        $bill = new Bill();
-        $bill->id_customer = $customer->id;
-        $bill->date_order = date('Y-m-d');
-        $bill->total = $cart->totalPrice;
-        $bill->payment = $request->input('payment_method');
-        $bill->note = $request->input('notes');
-        $bill->save();
+        // Lấy giỏ hàng từ session
+        $cart = session('cart');
 
-        foreach ($cart->items as $key => $value) {
-            $bill_detail = new BillDetail();
-            $bill_detail->id_bill = $bill->id;
-            $bill_detail->id_product = $key;
-            $bill_detail->quantity = $value['qty'];
-            $bill_detail->unit_price = $value['price'] / $value['qty'];
-            $bill_detail->save();
+        // Kiểm tra giỏ hàng
+        if (!$cart || count($cart->items) == 0) {
+            return back()->with('error', 'Giỏ hàng trống');
         }
 
-        Session::forget('cart');
-        return redirect()->route('banhang.order-success');
+        // Lưu đơn hàng
+        $order = new Order();
+        $order->customer_name = $request->name;
+        $order->gender = $request->gender;
+        $order->email = $request->email;
+        $order->address = $request->address;
+        $order->phone_number = $request->phone_number;
+        $order->notes = $request->notes;
+        $order->payment_method = $request->payment_method;
+        $order->total_price = $cart->totalPrice;
+        $order->status = 'moi';
+        $order->save();
+
+        // Lưu chi tiết đơn hàng
+        foreach ($cart->items as $product_id => $item) {
+            $detail = new OrderDetail();
+            $detail->order_id = $order->id;
+            $detail->product_id = $product_id;
+            $detail->quantity = $item['qty'];
+            $detail->price = $item['item']['promotion_price'] == 0 ? $item['item']['unit_price'] : $item['item']['promotion_price'];
+            $detail->save();
+        }
+
+        // Gửi email xác nhận
+        try {
+            Mail::to($order->email)->send(new OrderSuccessMail($order));
+        } catch (\Exception $e) {
+            \Log::error('Lỗi gửi email: ' . $e->getMessage());
+        }
+
+        // Xóa giỏ hàng
+        session()->forget('cart');
+
+        return redirect()->back()->with('success', 'Đặt hàng thành công! Kiểm tra email.');
     }
+
     public function orderSuccess()
     {
         return view('shop.order-success');
@@ -316,10 +357,56 @@ class PageController extends Controller
 
 
 
+    public function showProductType()
+    {
+
+        return view('shop.product_by_type');
+    }
     public function showByType($id)
     {
         $products = DB::table('products')->where('id_type', $id)->get();
 
         return view('shop.product_by_type', compact('products'));
+    }
+
+    public function toggleFavorite(Request $request, $productId)
+    {
+        $favorites = session()->get('favorites', []);
+
+        // Kiểm tra xem sản phẩm đã có trong danh sách yêu thích chưa
+        if (in_array($productId, $favorites)) {
+            // Nếu có thì xóa khỏi danh sách
+            $favorites = array_diff($favorites, [$productId]);
+        } else {
+            // Nếu chưa có thì thêm vào danh sách
+            $favorites[] = $productId;
+        }
+
+        // Lưu lại danh sách yêu thích vào session
+        session()->put('favorites', $favorites);
+
+        return back(); // Quay lại trang trước
+    }
+
+    public function showFavorites()
+    {
+        $favoriteProductIds = session('favorites', []);
+        $favoriteProducts = Product::whereIn('id', $favoriteProductIds)->get();
+
+        return view('shop.favorites', compact('favoriteProducts'));
+    }
+    public function chatbox()
+    {
+        $user = auth()->user();
+        $messages = [];
+
+        if ($user) {
+            $messages = Message::where(function ($query) use ($user) {
+                $query->where('from_user_id', $user->id)
+                    ->orWhere('to_user_id', $user->id);
+            })->orderBy('created_at')->get();
+        }
+
+        return view('shop.index', compact('messages'));
     }
 }

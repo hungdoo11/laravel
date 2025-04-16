@@ -58,11 +58,16 @@
                                         <a class="add-to-cart pull-left" href="{{ route('banhang.addtocart', $new_product->id) }}">
                                             <i class="fa fa-shopping-cart"></i>
                                         </a>
+                                        <a href="javascript:void(0)" class="favorite-btn" data-product-id="{{ $new_product->id }}">
+                                            <!-- <i class="fa fa-heart" style="color: {{ in_array($new_product->id, session('favorites', [])) ? 'red' : 'gray' }};"></i> -->
+                                            <i class="fa fa-heart {{ in_array($new_product->id, session('favorites', [])) ? 'favorite' : 'favorite-inactive' }}"></i>
+                                        </a>
                                         <a class="beta-btn primary" href="{{ route('banhang.chitiet', $new_product->id) }}">
                                             Chi tiết <i class="fa fa-chevron-right"></i>
                                         </a>
                                         <div class="clearfix"></div>
                                     </div>
+
                                 </div>
                             </div>
                             @if($stt % 4 == 0)
@@ -119,11 +124,17 @@
                                         <a class="add-to-cart pull-left" href="{{ route('banhang.addtocart', $top_product->id) }}">
                                             <i class="fa fa-shopping-cart"></i>
                                         </a>
+                                        <a href="javascript:void(0)" class="favorite-btn" data-product-id="{{ $top_product->id }}">
+                                            <!-- <i class="fa fa-heart" style="color: {{ in_array($top_product->id, session('favorites', [])) ? 'red' : 'gray' }}"></i> -->
+                                            <i class="fa fa-heart {{ in_array($top_product->id, session('favorites', [])) ? 'favorite' : 'favorite-inactive' }}"></i>
+
+                                        </a>
                                         <a class="beta-btn primary" href="{{ route('banhang.chitiet', $top_product->id) }}">
                                             Chi tiết <i class="fa fa-chevron-right"></i>
                                         </a>
                                         <div class="clearfix"></div>
                                     </div>
+
                                 </div>
                             </div>
                             @if($stt % 4 == 0)
@@ -139,4 +150,8 @@
             </div> <!-- .main-content -->
         </div> <!-- #content -->
     </div> <!-- .container -->
+    @if(Auth::check() && Auth::user()->level == 3)
+    @include('chat.chat-box')
+    @endif
+
     @endsection

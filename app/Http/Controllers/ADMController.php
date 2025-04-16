@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Message;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -104,5 +105,65 @@ class ADMController extends Controller
     public function editUser()
     {
         return view('admin.user_edit');
+    }
+
+    public function index()
+    {
+        $users = User::whereHas('messages', function ($q) {
+            $q->where('from_user_id', auth()->id())
+                ->orWhere('to_user_id', auth()->id());
+        })->get();
+
+        return view('admin.chat.index', compact('users'));
+    }
+
+    // Hiển thị tin nhắn cụ thể và form trả lời
+    // public function show($id)
+    // {
+    //     // Thay vì sử dụng sender_id và receiver_id, bạn dùng from_user_id và to_user_id
+    //     $messages = Message::with('sender')
+    //         ->where('to_user_id', auth()->id()) // chỉ lấy tin nhắn gửi đến admin
+    //         ->groupBy('from_user_id')
+    //         ->selectRaw('MAX(id) as id, from_user_id')
+    //         ->get();
+
+
+    //     // Nếu không có tin nhắn, bạn có thể trả về một trang thông báo hoặc thông báo trong view.
+    //     if ($messages->isEmpty()) {
+    //         return redirect()->route('admin.chat.index')->with('error', 'Không có tin nhắn nào!');
+    //     }
+
+    //     return view('admin.chat.show', compact('messages'));
+    // }
+
+    public function show($id)
+    {
+        $adminId = auth()->id();
+        $messages = Message::where(function ($query) use ($id) {
+            $query->where('from_user_id', $id)
+                ->orWhere('to_user_id', $id);
+        })->orderBy('created_at')->get();
+
+        $user = User::find($id); // lấy thông tin người dùng đang chat
+        return view('admin.chat.show', compact('messages', 'user', 'adminId'));
+    }
+
+
+
+
+    // Trả lời tin nhắn
+    public function reply(Request $request, $id)
+    {
+        $request->validate([
+            'message' => 'required|string',
+        ]);
+
+        $message = new Message();
+        $message->from_user_id = auth()->id(); // Admin gửi
+        $message->to_user_id = $id;            // Người nhận là user
+        $message->message = $request->message;
+        $message->save();
+
+        return redirect()->route('admin.chat.show', $id)->with('success', 'Tin nhắn đã được gửi!');
     }
 }

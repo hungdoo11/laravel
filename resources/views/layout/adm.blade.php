@@ -18,7 +18,7 @@
 
     <!-- Custom CSS -->
     <link href="{{ asset('dist/css/sb-admin-2.css') }}" rel="stylesheet">
-
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"> -->
     <!-- Font Awesome -->
     <link href="{{ asset('bower_components/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
 
@@ -27,7 +27,15 @@
 
     <!-- DataTables Responsive CSS -->
     <link href="{{ asset('bower_components/datatables-responsive/css/dataTables.responsive.css') }}" rel="stylesheet">
+    <!-- <style>
+        .tab-pane {
+            display: none;
+        }
 
+        .tab-pane.show {
+            display: block !important;
+        }
+    </style> -->
 </head>
 
 <body>
@@ -91,9 +99,9 @@
                                 <li>
                                     <a href="#">List Category</a>
                                 </li>
-                                <li>
+                                <!-- <li>
                                     <a href="#">Add Category</a>
-                                </li>
+                                </li> -->
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
@@ -103,9 +111,9 @@
                                 <li>
                                     <a href="#">List Product</a>
                                 </li>
-                                <li>
+                                <!-- <li>
                                     <a href="#">Add Product</a>
-                                </li>
+                                </li> -->
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
@@ -120,6 +128,22 @@
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-envelope fa-fw"></i> Chat<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{ route('admin.chat.index') }}">Trả lời tin nhắn</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-shopping-cart fa-fw"></i> Đơn hàng<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{ route('admin.orders.index') }}">Quản lý đơn hàng</a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
@@ -149,7 +173,7 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="{{ asset('dist/js/sb-admin-2.js') }}"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <!-- DataTables JavaScript -->
     <script src="{{ asset('bower_components/DataTables/media/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js') }}"></script>

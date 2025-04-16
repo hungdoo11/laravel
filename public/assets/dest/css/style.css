@@ -66,6 +66,14 @@ body {
     height: 320px;
 }
 
+.favorite {
+    color: red;
+}
+
+.favorite-inactive {
+    color: gray;
+}
+
 /* div#footer {
     width: 1522px;
     margin-left: -191px;

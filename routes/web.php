@@ -1,11 +1,15 @@
 <?php
 
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\User\UserOrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ADMController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Session;
-
+use App\Http\Controllers\OrderController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -116,8 +120,41 @@ Route::get('/order-success', [PageController::class, 'orderSuccess'])->name('ban
 Route::post('/input-email', [PageController::class, 'postInputEmail'])->name('postInputEmail');
 Route::get('/input-email', [PageController::class, 'getInputEmail'])->name('getInputEmail');
 
+Route::get('/product_type/{id}', [PageController::class, 'showProductType'])->name('showproducttype');
 Route::get('/product_type/{id}', [PageController::class, 'showByType']);
 
+Route::get('/favorite/{productId}', [PageController::class, 'toggleFavorite'])->name('product.toggleFavorite');
+Route::get('/favorites', [PageController::class, 'showFavorites'])->name('favorites');  // Định nghĩa route cho favorites
+
+// Route cho trang quản lý chat
+
+
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    // Route hiển thị danh sách tin nhắn
+    Route::get('/chat', [ADMController::class, 'index'])->name('chat.index');
+
+    // Route hiển thị chi tiết tin nhắn và form trả lời
+    Route::get('/chat/{id}', [ADMController::class, 'show'])->name('chat.show');
+
+    // Route xử lý trả lời tin nhắn
+    Route::post('/chat/{id}', [ADMController::class, 'reply'])->name('chat.reply');
+});
+
+Route::get('/order-success', [PageController::class, 'orderSuccess'])->name('banhang.order-success');
+
+Route::post('/chat/send', [MessageController::class, 'send'])->name('chat.send');
+
+Route::get('/admin/orders', [App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
+Route::put('/admin/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+Route::get('admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+Route::get('/admin/orders/{order}/details', [OrderController::class, 'details'])->name('orders.details');
+
+Route::prefix('user')->middleware('auth')->group(function () {
+    Route::get('/orders', [UserOrderController::class, 'index'])->name('user.orders.index');
+    Route::get('/profile/edit', [UserProfileController::class, 'edit'])->name('user.profile.edit');
+    Route::put('/profile', [UserProfileController::class, 'update'])->name('user.profile.update');
+    Route::get('/orders/{order}', [UserOrderController::class, 'show'])->name('user.orders.show');
+});
 
 
 Route::get('/check-session', function () {

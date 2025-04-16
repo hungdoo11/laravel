@@ -2,46 +2,42 @@
 @section('content')
 <div class="container">
 	<div id="content">
+		@if (session('success'))
+		<div class="alert alert-success">{{ session('success') }}</div>
+		@endif
+		@if (session('error'))
+		<div class="alert alert-danger">{{ session('error') }}</div>
+		@endif
 
 		<form action="{{ url('checkout') }}" method="post" class="beta-form-checkout">
 			@csrf
-			<!-- <div class="row">
-				session('success') sinh ra từ hàm postDatHang trong PageController
-				@if(Session::has('success'))
-				{{ Session::get('success')}}
-				@endif
-			</div> -->
 			<div class="row checkout">
 				<div class="col-sm-6">
 					<h4>Đặt hàng</h4>
 					<div class="space20">&nbsp;</div>
 					<div class="form-block">
 						<label for="name">Họ tên*</label>
-						<input type="text" id="name" placeholder="Họ tên" name="name" required>
+						<input type="text" id="name" name="name" placeholder="Họ tên" required>
 					</div>
 					<div class="form-block">
-						<label>Giới tính </label>
-						<input id="gender" type="radio" class="input-radio" name="gender" value="nam" checked="checked" style="width: 10%"><span style="margin-right: 10%">Nam</span>
-						<input id="gender" type="radio" class="input-radio" name="gender" value="nữ" style="width: 10%"><span>Nữ</span>
-
+						<label>Giới tính</label>
+						<input id="gender" type="radio" name="gender" value="nam" checked style="width: 10%">
+						<span style="margin-right: 10%">Nam</span>
+						<input id="gender" type="radio" name="gender" value="nu" style="width: 10%">
+						<span>Nữ</span>
 					</div>
-
 					<div class="form-block">
 						<label for="email">Email*</label>
-						<input type="email" id="email" required placeholder="expample@gmail.com" name="email">
+						<input type="email" id="email" name="email" placeholder="example@gmail.com" required>
 					</div>
-
 					<div class="form-block">
-						<label for="adress">Địa chỉ*</label>
-						<input type="text" id="adress" placeholder="Street Address" name="address" required>
+						<label for="address">Địa chỉ*</label>
+						<input type="text" id="address" name="address" placeholder="Street Address" required>
 					</div>
-
-
 					<div class="form-block">
-						<label for="phone">Điện thoại*</label>
-						<input type="text" id="phone" name="phone_number" required>
+						<label for="phone_number">Điện thoại*</label>
+						<input type="text" id="phone_number" name="phone_number" required>
 					</div>
-
 					<div class="form-block">
 						<label for="notes">Ghi chú</label>
 						<textarea id="notes" name="notes"></textarea>
@@ -55,37 +51,31 @@
 						</div>
 						<div class="your-order-body" style="padding: 0px 10px">
 							<div class="your-order-item">
-								<div>
-									@if(isset($productCarts) && !empty($productCarts))
-									@foreach($productCarts as $product)
-									<!-- one item -->
-									<div class="media">
-										<!-- Sửa đường dẫn ảnh -->
-										<img width="25%" src="{{ asset('images/product/' . $product['item']['image']) }}" alt="{{ $product['item']['name'] }}" class="pull-left">
-										<div class="media-body">
-											<p class="font-large">{{ $product['item']['name'] }}</p>
-											<span class="cart-item-amount">{{ $product['qty'] }}*<span>
-													@if($product['item']['promotion_price'] == 0)
-													{{ number_format($product['item']['unit_price']) }}
-													@else
-													{{ number_format($product['item']['promotion_price']) }}
-													@endif
-												</span></span>
-											@php
-											$dongia = $product['item']['promotion_price'] == 0 ? $product['item']['unit_price'] : $product['item']['promotion_price'];
-											$thanhtien = $dongia * $product['qty'];
-											@endphp
-											<span class="color-gray your-order-info">Số lượng: {{ $product['qty'] }} </span>
-											<span class="color-gray your-order-info">Thành tiền: {{ number_format($thanhtien) }} đồng</span>
-										</div>
+								@if(isset($productCarts) && !empty($productCarts))
+								@foreach($productCarts as $product)
+								<div class="media">
+									<img width="25%" src="{{ asset('images/product/' . $product['item']['image']) }}" alt="{{ $product['item']['name'] }}" class="pull-left">
+									<div class="media-body">
+										<p class="font-large">{{ $product['item']['name'] }}</p>
+										<span class="cart-item-amount">{{ $product['qty'] }} *
+											@if($product['item']['promotion_price'] == 0)
+											{{ number_format($product['item']['unit_price']) }}
+											@else
+											{{ number_format($product['item']['promotion_price']) }}
+											@endif
+										</span>
+										@php
+										$dongia = $product['item']['promotion_price'] == 0 ? $product['item']['unit_price'] : $product['item']['promotion_price'];
+										$thanhtien = $dongia * $product['qty'];
+										@endphp
+										<span class="color-gray your-order-info">Số lượng: {{ $product['qty'] }}</span>
+										<span class="color-gray your-order-info">Thành tiền: {{ number_format($thanhtien) }} đồng</span>
 									</div>
-									<!-- end one item -->
-									@endforeach
-									@else
-									<p>Giỏ hàng trống</p>
-									@endif
 								</div>
-								<div class="clearfix"></div>
+								@endforeach
+								@else
+								<p>Giỏ hàng trống</p>
+								@endif
 							</div>
 							<div class="your-order-item">
 								<div class="pull-left">
@@ -107,11 +97,9 @@
 								<option value="bank_transfer">Chuyển khoản ngân hàng</option>
 							</select>
 						</div>
-						<!-- Rest of the form -->
 					</div>
 				</div>
 			</div>
-
 		</form>
 	</div>
 </div>
